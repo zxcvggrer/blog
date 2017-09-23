@@ -1,0 +1,46 @@
+###Djaongo 学习
+   django 是一种用python写的基于MVC(Model View Controller)构造的web开发框架。
+   但是在Django中，控制器接受用户输入的部分由框架自行处理，所以 Django 里更关注的是模型（Model）、模板(Template)和视图（Views），称为 MTV模式
+##编写你的第一个Django应用，第1部分
+    #1.Django安装
+        pip install Django 
+    #2.创键一个项目
+        django-admin startobjects mysite
+       数据库连接
+         python manage.py migrate migrate
+         migrate会查看INSTALLED_APPS设置并根据mysite/settings.py文件中的数据库设置创建任何必要的数据库表，数据库的迁移还会跟踪应用的变化
+       开发服务器
+          python manage.py runserver 8080 
+          这时会看到django已经运行         
+    #3.创建模板
+          python manage.py startapp polls
+          模型指出了数据的唯一、明确的真实来源。 
+        激活模板
+          编辑mysite/settings.py文件，并修改INSTALLED_APPS设置以包含字符串'polls'
+          python manage.py makemigrations polls 
+          makemigrations告诉Django，已经对模型做了一些更改（在这个例子中，你创建了一个新的模型）并且会将这些更改记录为迁移文件。
+          python manage.py migrate
+          migrate命令会找出所有还没有被应用的迁移文件（Django使用数据库中一个叫做django_migrations的特殊表
+          来追踪哪些迁移文件已经被应用过），并且在你的数据库上运行它们 —— 本质上来讲，就是使你的数据库模式和你改动后的模型进行同步。
+ ##编写你的第一个Django应用，第2部分
+        1.创建一个管理员用户
+            python manage.py createsuperuser
+        2.启动开发服务器
+            python manage.py runserver 8080
+        3.进入管理站点
+            打开一个浏览器访问你本地域名中的 “/admin/” —— 例如http://127.0.0.1:8000/admin/。你应该会看到管理站点的登录界面：
+        4.让投票应用在管理站点中可编辑
+            需要打开polls/admin.py文件，把它编辑成这样：
+       
+                from django.contrib import admin
+                from .models import Question
+                admin.site.register(Question)
+        5.探索管理站点的功能
+        6.自定义管理表单
+        7.添加关联对象
+        8.自定义管理界面中的变更列表
+        9.自定义管理站点的外观
+        10.自定义项目的模板
+        11.自定义应用的模板
+        12.自定义管理站点的首页面
+      
