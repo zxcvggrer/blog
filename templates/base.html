@@ -70,7 +70,10 @@
               {%block main%}
               {%endblock main%}
             </main>
-            <aside class="col-md-4">
+            <aside class="col-md-4"> 
+                {%block toc%}
+                {%endblock toc%}
+
                 <div class="widget widget-recent-posts">
                 <h3 class="widget-title">最新文章</h3>
                 {% get_recent_posts as recent_post_list %}
@@ -83,6 +86,19 @@
                     暂无文章！
                     {% endfor %}
                 </ul>
+                </div>
+                <div class="widget widget-tag-cloud">
+                        <h3 class="widget-title">标签云</h3>
+                        {% get_tags as tag_list %}
+                        <ul>
+                            {% for tag in tag_list %}
+                            <li>
+                            <a href="{% url 'blogs:tag' tag.pk %}">{{ tag.name }}</a>
+                            </li>
+                            {% empty %}
+                            暂无标签！
+                            {% endfor %}
+                        </ul>
                 </div>  
                 <div class="widget widget-archives">
                 <h3 class="widget-title">归档</h3>
@@ -103,15 +119,15 @@
                 <ul>
                     {% for category in category_list %}
                     <li>
-                    <a href="{% url 'blogs:category' category.pk %}">{{ category.name }} <span class="post-count">(13)</span></a>
+                      <a href="{% url 'blogs:category' category.pk %}">{{ category.name }}
+                        <span class="post-count">({{ category.num_posts }})</span>
+                      </a>
                     </li>
                     {% empty %}
                     暂无分类！
                     {% endfor %}
-                </ul>
-                </div>                
-                {%block toc%}
-                {%endblock toc%}
+                  </ul>
+                </div>                  
             </aside>
         </div>
     </div>
