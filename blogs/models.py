@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 import markdown
-
+from django.utils.html import strip_tags
 # Create your models here.
 class Category(models.Model):
     name=models.CharField(max_length=100)
@@ -29,8 +29,8 @@ class Post(models.Model):
             # 先将 Markdown 文本渲染成 HTML 文本
             # strip_tags 去掉 HTML 文本的全部 HTML 标签
             # 从文本摘取前 54 个字符赋给 excerpt
-            #self.excerpt = strip_tags(md.convert(self.body))[:54]
-            self.excerpt = md.convert(self.body)[:54]
+            self.excerpt = strip_tags(md.convert(self.body))[:54]
+            #self.excerpt = md.convert(self.body)[:54]
         super(Post, self).save(*args, **kwargs)
     category=models.ForeignKey(Category)#一对多
     tags=models.ManyToManyField(Tag,blank=True)#多对多

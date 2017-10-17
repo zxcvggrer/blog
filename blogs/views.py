@@ -5,23 +5,26 @@ from comment.forms import CommentForm
 from django.views.generic import ListView,DetailView
 from django.utils.text import slugify
 from markdown.extensions.toc import TocExtension
+from django.db.models import Q
 # Create your views here.
+def search(request):
+    q = request.GET.get('q')
+    error_msg = ''
 
+    if not q:
+        error_msg = "请输入关键词"
+        return render(request, 'blogs/index.html', {'error_msg': error_msg})
+
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
+    return render(request, 'blogs/index.html', {'error_msg': error_msg,
+                                               'post_list': post_list})
 class IndexView(ListView):
     model =Post
     template_name='blogs/index.html'
     context_object_name='post_list'
-    paginate_by=2
+    paginate_by=10
     def get_context_data(self, **kwargs):
-        """
-        在视图函数中将模板变量传递给模板是通过给 render 函数的 context 参数传递一个字典实现的，
-        例如 render(request, 'blog/index.html', context={'post_list': post_list})，
-        这里传递了一个 {'post_list': post_list} 字典给模板。
-        在类视图中，这个需要传递的模板变量字典是通过 get_context_data 获得的，
-        所以我们复写该方法，以便我们能够自己再插入一些我们自定义的模板变量进去。
-        """
-
-        # 首先获得父类生成的传递给模板的字典。
+       
         context = super().get_context_data(**kwargs)
 
         # 父类生成的字典中已有 paginator、page_obj、is_paginated 这三个模板变量，
@@ -205,7 +208,7 @@ class PostDetailView(DetailView):
             })
 '''
 class ArchivesView(ListView):
-    modul=Post
+    model=Post
     template_name='blogs/index.html'
     context_object_name='post_list'
     def get_queryset(self):

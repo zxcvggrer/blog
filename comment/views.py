@@ -10,9 +10,10 @@ from .forms import CommentForm
 def post_comment(request, post_pk):
 
     post = get_object_or_404(Post, pk=post_pk)
+    #print(post)
     if request.method == 'POST':
         form = CommentForm(request.POST)
-        #print(form)
+        print(form)
         if form.is_valid():
             # 检查到数据是合法的，调用表单的 save 方法保存数据到数据库，
             # commit=False 的作用是仅仅利用表单的数据生成 Comment 模型类的实例，但还不保存评论数据到数据库。
@@ -34,9 +35,9 @@ def post_comment(request, post_pk):
             # 因此使用 post.comment_set.all() 反向查询全部评论。
             # 具体请看下面的讲解。
             comment_list = post.comment_set.all()
-            context = {'post': post,
+            context = {'psot': post,
                        'form': form,
-                       'comment_list': comment_list
+                       'comment_lsit': comment_list
                        }
             return render(request, 'blogs/detail.html', context=context)
     # 不是 post 请求，说明用户没有提交数据，重定向到文章详情页。
